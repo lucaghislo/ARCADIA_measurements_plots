@@ -8,6 +8,9 @@ for i = 1:length(index_interpreter)
     set(groot, default_name,'latex');
 end
 
+
+%% PLOT TC
+
 TCs = readtable('TC_all_TPs.csv');
 
 TC_labels1 = strings(16, 1);
@@ -34,7 +37,7 @@ for j = 1:16
         lgd{i+1} = strcat('Slope = ', " ", num2str(i));
     end
     
-    legend(lgd, 'Location', 'northwest', 'NumColumns', 2)
+    legend(lgd, 'Location', 'northeast', 'NumColumns', 2)
     box on
     grid on
     title(['\textbf{TP', num2str(j), '}'])
@@ -47,5 +50,26 @@ for j = 1:16
     exportgraphics(gcf,['output/TC/mean_on_x/TP', num2str(j), '_TC_mean.pdf'],'ContentType','vector');
 
     fileID_out = fopen(['output/TC/data/mean_on_x/TP', num2str(j),'_TC_mean.dat'], 'w');
-    fprintf(fileID_out ,' %f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', TCs_means);
+    fprintf(fileID_out ,'%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', TCs_means);
+end
+
+
+%% MINIMIZZAZIONE TC PER MEAN E SLOPE
+
+clear; clc;
+
+TCs = readtable('TC_all_TPs.csv');
+
+TC_labels1 = strings(16, 1);
+
+k1 = 1;
+for k2 = 1:3:46
+    TC_labels1(k1, 1) = strcat("Var", num2str(k2));
+    k1 = k1 + 1;
+end
+
+TCs_TPs = nan(256, 16);
+
+for i = 1:16
+    
 end
