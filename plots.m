@@ -66,15 +66,15 @@ TC_labels3 = strings(16, 1);
 k1 = 1;
 for k2 = 1:3:46
     TC_labels1(k1, 1) = strcat("Var", num2str(k2));
-    TC_labels1(k1, 1) = strcat("Var", num2str(k2+1));
-    TC_labels1(k1, 1) = strcat("Var", num2str(k2+2));
+    TC_labels2(k1, 1) = strcat("Var", num2str(k2+1));
+    TC_labels3(k1, 1) = strcat("Var", num2str(k2+2));
     k1 = k1 + 1;
 end
 
 TC_min = nan(16, 3);
 
 for i = 1:16
-    [min_val, min_index] = min(TCs.(TC_labels(i)));
+    [min_val, min_index] = min(TCs.(TC_labels1(i)));
     TC_min(i, 1) = min_val;
-    %TC_min(i, 2) = 
+    TC_min(i, 2) = TCs(1, TC_labels2())
 end
