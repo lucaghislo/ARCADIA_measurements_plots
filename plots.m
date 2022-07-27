@@ -1,3 +1,5 @@
+%% PLOT TC
+
 clear; clc;
 
 % This script changes all interpreters from tex to latex. 
@@ -7,9 +9,6 @@ for i = 1:length(index_interpreter)
     default_name = strrep(list_factory{index_interpreter(i)},'factory','default');
     set(groot, default_name,'latex');
 end
-
-
-%% PLOT TC
 
 TCs = readtable('TC_all_TPs.csv');
 
@@ -37,7 +36,7 @@ for j = 1:16
         lgd{i+1} = strcat('Slope = ', " ", num2str(i));
     end
     
-    legend(lgd, 'Location', 'northeast', 'NumColumns', 2)
+    legend(lgd, 'Location', 'northwest', 'NumColumns', 2)
     box on
     grid on
     title(['\textbf{TP', num2str(j), '}'])
@@ -61,15 +60,21 @@ clear; clc;
 TCs = readtable('TC_all_TPs.csv');
 
 TC_labels1 = strings(16, 1);
+TC_labels2 = strings(16, 1);
+TC_labels3 = strings(16, 1);
 
 k1 = 1;
 for k2 = 1:3:46
     TC_labels1(k1, 1) = strcat("Var", num2str(k2));
+    TC_labels1(k1, 1) = strcat("Var", num2str(k2+1));
+    TC_labels1(k1, 1) = strcat("Var", num2str(k2+2));
     k1 = k1 + 1;
 end
 
-TCs_TPs = nan(256, 16);
+TC_min = nan(16, 3);
 
 for i = 1:16
-    
+    [min_val, min_index] = min(TCs.(TC_labels(i)));
+    TC_min(i, 1) = min_val;
+    %TC_min(i, 2) = 
 end
