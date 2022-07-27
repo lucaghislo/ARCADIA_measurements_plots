@@ -9,11 +9,7 @@ for i = 1:length(index_interpreter)
 end
 
 TCs = readtable('TC_all_TPs.csv');
-TC_labels = nan(16, 1);
-
-for i = 1:16
-    TC_labels(i) = "Var" + num2str(i);
-end
+TC_labels  
 
 TCs_means = nan(16, 16);
 lgd = cell(16,1) ;
