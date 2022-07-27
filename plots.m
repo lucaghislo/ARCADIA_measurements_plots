@@ -24,7 +24,7 @@ TCs_means = nan(16, 16);
 lgd = cell(16,1) ;
 
 for j = 1:16
-    f = figure('Visible', 'off');;
+    f = figure('Visible', 'off');
     colors = distinguishable_colors(16, 'w');
     hold on
     
@@ -45,7 +45,7 @@ for j = 1:16
     set(gca,'FontSize', 15)
     f.Position = [200 160 1080  800];
     exportgraphics(gcf,['output/TC/mean_on_x/TP', num2str(j), '_TC_mean.pdf'],'ContentType','vector');
-end
 
-fileID_out = fopen('output/TC/TC_mean_on_x.dat', 'w');
-fprintf(fileID_out ,' %f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', TCs_means);
+    fileID_out = fopen(['output/TC/data/mean_on_x/TP', num2str(j),'_TC_mean.dat'], 'w');
+    fprintf(fileID_out ,' %f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', TCs_means);
+end
