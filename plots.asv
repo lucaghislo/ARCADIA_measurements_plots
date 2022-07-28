@@ -119,9 +119,10 @@ for k = 1:16
     j = 1;
     for i = 1:size(VOUTs, 1)
         % Var2, Var3, Var4
-        if table2array(VOUTs(i, TC_labels2(k))) == temperatures(j) && table2array(VOUTs(i, TC_labels3(k))) == TC_min(k, 2) && table2array(VOUTs(i, TC_labels4(k))) == TC_min(k, 3)
+        if table2array(VOUTs(i, TC_labels2(k))) == temperatures(j) && table2array(VOUTs(i, "Var3")) == TC_min(k, 2) && table2array(VOUTs(i, "Var4")) == TC_min(k, 3)
             Vout_temp(j, 1) = temperatures(j);
-            Vout_temp(j, 2) = table2array(VOUTs(i, TC_labels1(k)));
+            Vout_temp(j, 2) = table2array(VOUTs(i, "Var1"));
+    
             if j<12
                 j = j + 1;
             end
@@ -129,10 +130,8 @@ for k = 1:16
     end
     
     scatter(Vout_temp(:, 1), Vout_temp(:, 2)*1000, '')
-    vout_mean = mean(Vout_temp(:, 2)) * 1000
-    vout_mean = round(vout_mean/10)*10
-    ylim([vout_mean - 10 vout_mean + 10])
-    yticks([vout_mean-10:2:vout_mean + 10])
+    ylim([610 630])
+    yticks([610:2:630])
     xlim([-50 80])
     xticks([-50:10:80])
     box on
@@ -144,5 +143,4 @@ for k = 1:16
     set(gca,'FontSize', 12)
     f.Position = [200 160 1080  800];
     exportgraphics(gcf,['output/Vout/Vout_TP', num2str(k), '_temp.pdf'],'ContentType','vector');
-    writematrix(Vout_temp,['output/Vout/data/Vout_TP', num2str(k), '_temp.dat'],'Delimiter','tab')
 end
