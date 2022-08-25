@@ -146,3 +146,105 @@ for k = 1:16
     exportgraphics(gcf,['output/Vout/Vout_TP', num2str(k), '_temp.pdf'],'ContentType','vector');
     writematrix(Vout_temp,['output/Vout/data/Vout_TP', num2str(k), '_temp.dat'],'Delimiter','tab')
 end
+
+
+%% PLOT BGR VOLTAGE (Mean = 7, All slopes, Vin = 1.2V)
+
+clear; clc;
+
+% This script changes all interpreters from tex to latex. 
+list_factory = fieldnames(get(groot,'factory'));
+index_interpreter = find(contains(list_factory,'Interpreter'));
+for i = 1:length(index_interpreter)
+    default_name = strrep(list_factory{index_interpreter(i)},'factory','default');
+    set(groot, default_name,'latex');
+end
+
+file_names = ["m40", "m30", "m20", "m10", "0", "10", "20", "30", "40", "50", "60"];
+temperatures = [-40:10:70];
+VOLTAGES = nan(16, 11);
+colors = distinguishable_colors(16, 'w');
+
+for i = 1:11
+    data = readtable("input/Results_TP2_REG_" + file_names(i) + ".csv");
+    voltage = data.Volt(data.MEAN == 7 & data.Vin == 1.2);
+    VOLTAGES(:, i) = voltage;
+end
+
+f = figure("Visible", "on")
+hold on
+for i = 1:11
+    scatter(temperatures(i), VOLTAGES(:, i), [], colors, "filled");
+end
+hold off
+
+slopes = [0:1:15];
+legend_entries = slopes + "  ";
+legend_entries = legend_entries';
+
+box on
+grid on
+hleg =  legend(legend_entries, "Location", "eastoutside");
+title("\textbf{TP2 (VDDA = 1.2 V, Mean = 7)}")
+xlabel("Temperature [$^{\circ}$C]")
+ylabel("Bandgap [V]")
+xlim([-45 65])
+
+htitle = get(hleg,'Title');
+set(htitle,'String','\textbf{Slope}')
+
+set(gca,'FontSize', 12)
+f.Position = [10 10 1000  650];
+exportgraphics(gcf, 'output/TP2_mean7_voltage_vs_temperature_slopes.pdf', 'ContentType', 'vector');
+
+
+%% PLOT BGR VOLTAGE (Slope = 7, All means, Vin = 1.2V)
+
+clear; clc;
+
+% This script changes all interpreters from tex to latex. 
+list_factory = fieldnames(get(groot,'factory'));
+index_interpreter = find(contains(list_factory,'Interpreter'));
+for i = 1:length(index_interpreter)
+    default_name = strrep(list_factory{index_interpreter(i)},'factory','default');
+    set(groot, default_name,'latex');
+end
+
+file_names = ["m40", "m30", "m20", "m10", "0", "10", "20", "30", "40", "50", "60"];
+temperatures = [-40:10:70];
+VOLTAGES = nan(16, 11);
+colors = distinguishable_colors(16, 'w');
+
+for i = 1:11
+    data = readtable("input/Results_TP2_REG_" + file_names(i) + ".csv");
+    voltage = data.Volt(data.SLOPE == 7 & data.Vin == 1.2);
+    VOLTAGES(:, i) = voltage;
+end
+
+f = figure("Visible", "on")
+hold on
+for i = 1:11
+    scatter(temperatures(i), VOLTAGES(:, i), [], colors, "filled");
+end
+hold off
+
+means = [0:1:15];
+legend_entries = means + "  ";
+legend_entries = legend_entries';
+
+box on
+grid on
+hleg =  legend(legend_entries, "Location", "eastoutside");
+title("\textbf{TP2 (VDDA = 1.2 V, Slope = 7)}")
+xlabel("Temperature [$^{\circ}$C]")
+ylabel("Bandgap [V]")
+xlim([-45 65])
+ylim([0.48 0.72])
+yticks([0.48:0.02:0.72])
+
+htitle = get(hleg,'Title');
+set(htitle,'String','\textbf{Mean}')
+
+set(gca,'FontSize', 12)
+f.Position = [10 30 1000  650];
+exportgraphics(gcf, 'output/TP2_slope7_voltage_vs_temperature_means.pdf', 'ContentType', 'vector');
