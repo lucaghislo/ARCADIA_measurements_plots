@@ -261,8 +261,8 @@ data = readtable("input/data.txt");
 f = figure("Visible", "on");
 
 hold on
-scatter(data.Var1, data.Var2, "filled")
-plot([data.Var1(1), data.Var1(3)], [data.Var2(1), data.Var2(3)], "LineStyle", "--", "LineWidth", 1)
+plot([data.Var1(1), data.Var1(3)], [data.Var2(1), data.Var2(3)], "LineStyle", "--", "LineWidth", 1, "Color", "red")
+scatter(data.Var1, data.Var2, "filled", "MarkerFaceColor", "blue")
 hold off
 
 box on
@@ -270,6 +270,6 @@ ylim([0.47 0.53])
 xlim([1 1.35])
 ylabel("$V_{OUT}$ [V]")
 xlabel("$V_{DD}$ [V]")
-set(gca,'FontSize', 12)
+set(gca,'FontSize', 11)
 
 exportgraphics(gcf, 'output/VDD_vs_VOUT.pdf', 'ContentType', 'vector');
