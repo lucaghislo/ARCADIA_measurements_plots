@@ -160,12 +160,12 @@ for i = 1:length(index_interpreter)
     set(groot, default_name,'latex');
 end
 
-file_names = ["m40", "m30", "m20", "m10", "0", "10", "20", "30", "40", "50", "60"];
+file_names = ["m40", "m30", "m20", "m10", "0", "10", "20", "30", "40", "50", "60", "70"];
 temperatures = [-40:10:70];
 VOLTAGES = nan(16, 11);
 colors = distinguishable_colors(16, 'w');
 
-for i = 1:11
+for i = 1:12
     data = readtable("input/Results_TP2_REG_" + file_names(i) + ".csv");
     voltage = data.Volt(data.MEAN == 7 & data.Vin == 1.2);
     VOLTAGES(:, i) = voltage;
@@ -173,7 +173,7 @@ end
 
 f = figure("Visible", "on")
 hold on
-for i = 1:11
+for i = 1:12
     scatter(temperatures(i), VOLTAGES(:, i), [], colors, "filled");
 end
 hold off
@@ -183,15 +183,16 @@ legend_entries = slopes + "  ";
 legend_entries = legend_entries';
 
 box on
-grid on
+%grid on
 hleg =  legend(legend_entries, "Location", "eastoutside");
-title("\textbf{TP2 (VDDA = 1.2 V, Mean = 7)}")
+%title("\textbf{TP2 (VDDA = 1.2 V, Mean = 7)}")
 xlabel("Temperature [$^{\circ}$C]")
 ylabel("Bandgap [V]")
-xlim([-45 65])
+xlim([-45 75])
+xticks([-40:10:70])
 
 htitle = get(hleg,'Title');
-set(htitle,'String','\textbf{Slope}')
+set(htitle,'String','\textbf{R0 conf.}')
 
 set(gca,'FontSize', 12)
 f.Position = [10 10 1000  650];
@@ -210,12 +211,12 @@ for i = 1:length(index_interpreter)
     set(groot, default_name,'latex');
 end
 
-file_names = ["m40", "m30", "m20", "m10", "0", "10", "20", "30", "40", "50", "60"];
+file_names = ["m40", "m30", "m20", "m10", "0", "10", "20", "30", "40", "50", "60", "70"];
 temperatures = [-40:10:70];
 VOLTAGES = nan(16, 11);
 colors = distinguishable_colors(16, 'w');
 
-for i = 1:11
+for i = 1:12
     data = readtable("input/Results_TP2_REG_" + file_names(i) + ".csv");
     voltage = data.Volt(data.SLOPE == 7 & data.Vin == 1.2);
     VOLTAGES(:, i) = voltage;
@@ -223,7 +224,7 @@ end
 
 f = figure("Visible", "on")
 hold on
-for i = 1:11
+for i = 1:12
     scatter(temperatures(i), VOLTAGES(:, i), [], colors, "filled");
 end
 hold off
@@ -233,18 +234,22 @@ legend_entries = means + "  ";
 legend_entries = legend_entries';
 
 box on
-grid on
+%grid on
 hleg =  legend(legend_entries, "Location", "eastoutside");
-title("\textbf{TP2 (VDDA = 1.2 V, Slope = 7)}")
+%title("\textbf{TP2 (VDDA = 1.2 V, Slope = 7)}")
 xlabel("Temperature [$^{\circ}$C]")
 ylabel("Bandgap [V]")
-xlim([-45 65])
+xlim([-45 75])
+xticks([-40:10:70])
 ylim([0.48 0.72])
 yticks([0.48:0.02:0.72])
 
 htitle = get(hleg,'Title');
-set(htitle,'String','\textbf{Mean}')
+set(htitle,'String','\textbf{R2 conf.}')
 
 set(gca,'FontSize', 12)
 f.Position = [10 30 1000  650];
 exportgraphics(gcf, 'output/TP2_slope7_voltage_vs_temperature_means.pdf', 'ContentType', 'vector');
+
+
+%% 
