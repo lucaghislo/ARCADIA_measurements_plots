@@ -187,7 +187,7 @@ box on
 hleg =  legend(legend_entries, "Location", "eastoutside");
 %title("\textbf{TP2 (VDDA = 1.2 V, Mean = 7)}")
 xlabel("Temperature [$^{\circ}$C]")
-ylabel("Bandgap [V]")
+ylabel("$V_{OUT}$ [V]")
 xlim([-45 75])
 xticks([-40:10:70])
 
@@ -238,7 +238,7 @@ box on
 hleg =  legend(legend_entries, "Location", "eastoutside");
 %title("\textbf{TP2 (VDDA = 1.2 V, Slope = 7)}")
 xlabel("Temperature [$^{\circ}$C]")
-ylabel("Bandgap [V]")
+ylabel("$V_{OUT}$ [V]")
 xlim([-45 75])
 xticks([-40:10:70])
 ylim([0.48 0.72])
