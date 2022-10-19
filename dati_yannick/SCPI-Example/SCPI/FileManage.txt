@@ -1,0 +1,58 @@
+*IDN?
+
+CONF:RES 1000, 0.01;
+SAMP:COUN 10;
+READ?
+SYST:ERR?
+
+MMEM:STOR:DATA RDG_STORE, "INT:\MyOhmsRdgs";
+MMEM:UPL? "INT:\MyOhmsRdgs.csv";
+
+SYST:ERR?
+
+%Example 2
+CONF?
+
+MMEM:STOR:STAT "INT:\OhmsStat";
+MMEM:STOR:PREF "INT:\OhmsPref";
+
+*RST;
+CONF?
+
+MMEM:LOAD:STAT "INT:\OhmsStat.sta";
+
+CONF?
+
+%Example 3
+MMEM:MDIR "INT:\Rdgs";
+MMEM:DOWN:FNAM "INT:\Rdgs\MyOhmsRdgs.csv";
+SYST:ERR?
+
+MMEM:DOWN:DATA;
+SYST:ERR?
+
+MMEM:CAT? "INT:\Rdgs";
+
+%Check for USB function
+
+
+MMEM:MDIR "USB:\Rdgs";
+MMEM:DOWN:FNAM "USB:\Rdgs\MyOhmsRdgs.csv";
+MMEM:DOWN:DATA;
+MMEM:CAT? "USB:\Rdgs";
+SYST:ERR?
+
+MMEM:DEL "INT:\MyOhmsRdgs.csv";
+MMEM:DEL "INT:\OhmsStat.sta";
+MMEM:DEL "INT:\OhmsPref.prf";
+MMEM:DEL "INT:\Rdgs\MyOhmsRdgs.csv";
+SYST:ERR?
+
+MMEM:RDIR "INT:\Rdgs";
+
+MMEM:DEL "USB:\Rdgs\MyOhmsRdgs.csv";
+SYST:ERR?
+MMEM:RDIR "USB:\Rdgs";
+SYST:ERR?
+
+
