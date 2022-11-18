@@ -194,7 +194,7 @@ xticks([-40:10:70])
 htitle = get(hleg,'Title');
 set(htitle,'String','\textbf{R0 conf.}')
 
-set(gca,'FontSize', 12)
+set(gca,'FontSize', 16)
 f.Position = [10 10 1000  650];
 exportgraphics(gcf, 'output/TP2_mean7_voltage_vs_temperature_slopes.pdf', 'ContentType', 'vector');
 
@@ -247,7 +247,7 @@ yticks([0.48:0.02:0.72])
 htitle = get(hleg,'Title');
 set(htitle,'String','\textbf{R2 conf.}')
 
-set(gca,'FontSize', 12)
+set(gca,'FontSize', 16)
 f.Position = [10 30 1000  650];
 exportgraphics(gcf, 'output/TP2_slope7_voltage_vs_temperature_means.pdf', 'ContentType', 'vector');
 
