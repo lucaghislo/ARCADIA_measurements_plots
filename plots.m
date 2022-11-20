@@ -299,7 +299,7 @@ data = data(:, 2:end);
 f = figure("Visible", "on");
 hold on
 for i = 1:length(legend_string)
-    plot(x, data(:, i).*1000, "LineWidth", 1, "Color", [colors(i, 1), colors(i, 2), colors(i, 3)])
+    plot(x, data(:, i), "LineWidth", 1, "Color", [colors(i, 1), colors(i, 2), colors(i, 3)])
 end
 hold off
 
@@ -307,9 +307,9 @@ legend(legend_string, "Location", "northeastoutside")
 
 box on
 grid off
-ylim([500 700])
+ylim([0.5 0.7])
 xlim([-50 80])
-ylabel("$V_{OUT}$ [mV]")
+ylabel("$V_{OUT}$ [V]")
 xlabel("Temperature [$^{\circ}$C]")
 set(gca,'FontSize', 14)
 
