@@ -299,20 +299,18 @@ data = data(:, 2:end);
 f = figure("Visible", "on");
 hold on
 for i = 1:length(legend_string)
-    plot(x, data(:, i).*1000, "LineWidth", 1, "Color", [colors(i, 1), colors(i, 2), colors(i, 3)])
+    plot(x, data(:, i).*1000, "LineWidth", 0.8, "Color", [colors(i, 1), colors(i, 2), colors(i, 3)])
 end
 hold off
 
-legend(legend_string, "Location", "northeastoutside")
+legend(legend_string, )
 
 box on
 grid off
 ylim([500 700])
 xlim([-50 80])
 ylabel("$V_{OUT}$ [mV]")
-xlabel("Temperature [$^{\circ}$C]")
-set(gca,'FontSize', 14)
-
-f.Position = [10 30 700  550];
+xlabel("T [$^{circ}$C]")
+set(gca,'FontSize', 11)
 
 exportgraphics(gcf, 'output/Vout_vs_T.pdf', 'ContentType', 'vector');
