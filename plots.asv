@@ -333,4 +333,4 @@ end
 
 vouts
 mean(vouts)
-std(vouts)
+(vouts)
