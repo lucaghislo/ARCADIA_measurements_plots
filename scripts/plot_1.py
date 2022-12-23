@@ -86,6 +86,7 @@ for TP in TPs:
             color=colors[vin_index],
         )
         plt.xticks(temperatures_int)
+        plt.grid()
 
         vin_index = vin_index + 1
 
