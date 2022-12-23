@@ -17,8 +17,9 @@ github_output_main = "output"
 drive_output_main = r"C:\Users\ghisl\Google Drive UniBG\UniBG\CORSI\PhD\misure_arcadia\plots_articolo_arcadia\plots"
 TP_temp_slope_mean_vout = os.path.join(main_input_path, "TP_temp_slope_mean_vout")
 
-plot1_output_folder_drive = os.path.join(drive_output_main, "plot_1")
-plot1_output_folder_github = os.path.join(github_output_main, "plot_1")
+output_folder_drive = os.path.join(drive_output_main, "plot_1")
+output_folder_github = os.path.join(github_output_main, "plot_1")
+
 temperatures_str = [
     "m40",
     "m30",
@@ -96,7 +97,7 @@ for TP in TPs:
         + r"})$"
     )
     print_plot(
-        plot1_output_folder_drive,
-        plot1_output_folder_github,
+        output_folder_drive,
+        output_folder_github,
         "plot_1_TP" + str(TP) + ".pdf",
     )

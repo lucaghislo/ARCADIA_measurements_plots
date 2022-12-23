@@ -9,8 +9,8 @@ from plot_config import *
 from save_figure import *
 
 
-# PLOT 2
-# Vout vs Vdd (da 0 a 1.32V) dei 16 bandgap (R0 e R2 a 0111 e 0111) a T=20°C.
+# PLOT 3
+# Per un BGR, Vout vs Vdd (R0 e R2 a 0111 e 0111) per 3 temperature differenti (-40°C, 20°C, 70°C).
 
 # PLOT CONFIGURATION
 # Label size
@@ -26,22 +26,13 @@ github_output_main = "output"
 drive_output_main = r"C:\Users\ghisl\Google Drive UniBG\UniBG\CORSI\PhD\misure_arcadia\plots_articolo_arcadia\plots"
 TP_temp_vin_vout = os.path.join(main_input_path, "TP_temp_vin_vout")
 
-output_folder_drive = os.path.join(drive_output_main, "plot_2")
-output_folder_github = os.path.join(github_output_main, "plot_2")
+output_folder_drive = os.path.join(drive_output_main, "plot_3")
+output_folder_github = os.path.join(github_output_main, "plot_3")
 
 TPs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 temperatures_str = [
     "m40",
-    "m30",
-    "m20",
-    "m10",
-    "0",
-    "10",
-    "20",
     "30",
-    "40",
-    "50",
-    "60",
     "70",
 ]
 temperatures_int = [-40, 30, 70]
@@ -55,11 +46,11 @@ markers = ["o", "s", "v", "^", "<", ">", "p", "*", "d", "D", "h", "H", 5, 6, 7, 
 # All TPs in one plot per temperature
 for direction in directions:
     temp_counter = 0
-    for temp in temperatures_str:
+    for TP in TPs:
         try:
             plt.clf()
-            TP_index = 0
-            for TP in TPs:
+            temp_index = 0
+            for temp in temperatures_str:
                 if direction == "UP":
                     filename = (
                         "Results_TP" + str(TP) + "_TEMP_" + str(temp) + "_0_UP.csv"
@@ -83,20 +74,20 @@ for direction in directions:
                     Vin,
                     Vout,
                     linewidth=0.7,
-                    linestyle="-" if TP_index < len(markers) / 2 else "--",
-                    marker=markers[TP_index],
+                    linestyle="-" if temp_index < len(markers) / 2 else "--",
+                    marker=markers[temp_index],
                     markersize=3,
-                    label="TP" + str(TP),
+                    label=str(temperatures_int[temp_index]) + r"$^{\circ}$C",
                 )
-                TP_index = TP_index + 1
+                temp_index = temp_index + 1
 
-            plt.legend(loc="upper left", title=r"\textbf{Bandgap}")
+            plt.legend(loc="upper left", title=r"\textbf{Temperature}")
             plt.xlabel(r"$V_{DD}$ [V]")
             plt.ylabel(r"$V_{OUT}$ [V]")
             plt.title(
-                r"\boldmath$V_{OUT}$ \textbf{vs} \boldmath$V_{DD}$ \textbf{for all TPs at "
-                + str(temp)
-                + r"°C ("
+                r"\boldmath$V_{OUT}$ \textbf{vs} \boldmath$V_{DD}$ \textbf{for TP"
+                + str(TP)
+                + r" ("
                 + str(direction)
                 + r")}"
             )
@@ -105,11 +96,7 @@ for direction in directions:
             print_plot(
                 output_folder_drive,
                 output_folder_github,
-                "plot_2_"
-                + str(temperatures_int[temp_counter])
-                + "C_"
-                + str(direction)
-                + ".pdf",
+                "plot_3_TP" + str(TP) + "_" + str(direction) + ".pdf",
             )
 
             temp_counter = temp_counter + 1
