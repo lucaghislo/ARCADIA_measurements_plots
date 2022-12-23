@@ -23,7 +23,9 @@ def compute_histogram_bins(data, desired_bin_size):
     min_boundary = -1.0 * (min_val % desired_bin_size - min_val)
     max_boundary = max_val - max_val % desired_bin_size + desired_bin_size
     n_bins = int((max_boundary - min_boundary) / desired_bin_size) + 1
-    bins = np.linspace(min_boundary, max_boundary, n_bins)
+    bins = np.arange(
+        min_boundary, min_boundary + n_bins * desired_bin_size, desired_bin_size
+    )
     return bins
 
 
@@ -89,6 +91,7 @@ for temp in temperatures_str:
         linewidth=1,
         align="left",
         color="teal",
+        alpha=0.5,
     )
     plt.yticks(range(0, int(max(n)) + 1))
     plt.xlabel(r"$V_{OUT}$ [V]")
@@ -111,9 +114,10 @@ for temp in temperatures_str:
         + " V",
         fontsize=13,
         verticalalignment="top",
-        backgroundcolor="white",
-        bbox=dict(facecolor="none", edgecolor="black"),
+        bbox=dict(facecolor="white", edgecolor="black"),
     )
+
+    plt.grid()
 
     print_plot(
         output_folder_drive,
