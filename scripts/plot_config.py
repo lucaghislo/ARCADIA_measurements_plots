@@ -11,3 +11,4 @@ matplotlib.rcParams["ytick.direction"] = "in"
 matplotlib.rcParams["xtick.labelsize"] = 12
 matplotlib.rcParams["legend.fontsize"] = 12
 matplotlib.rcParams["axes.labelsize"] = 12
+matplotlib.rcParams["font.size"] = 12
