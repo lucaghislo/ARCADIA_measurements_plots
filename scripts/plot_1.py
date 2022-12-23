@@ -49,6 +49,7 @@ R2 = 7
 markers = ["o", "s", "v"]
 
 for TP in TPs:
+    print("TP: " + str(TP))
     plt.clf()
     colors = distinctipy.get_colors(3)
     vin_index = 0
