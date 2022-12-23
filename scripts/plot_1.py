@@ -1,27 +1,22 @@
 import os.path
 import pandas as pd
 import numpy as np
-import matplotlib
-import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
-from scipy.stats import norm
 from distinctipy import distinctipy
 from matplotlib.lines import Line2D
 
 from plot_config import *
 from save_figure import *
 
-main_input_path = "data"
-github_output_main = "output"
-drive_output_main = r"C:\Users\ghisl\Google Drive UniBG\UniBG\CORSI\PhD\misure_arcadia\plots_articolo_arcadia\plots"
-TP_temp_vin_vout = os.path.join(main_input_path, "TP_temp_vin_vout")
-TP_temp_slope_mean_vout = os.path.join(main_input_path, "TP_temp_slope_mean_vout")
-
-# RO: slope
-# R1: mean
 
 # PLOT 1
 # Per un BGR, Vout vs T (R0 e R2 a 0111 e 0111) per i tre valori di Vdd usati nelle misure (1.08V, 1.2V, 1.32V).
+
+main_input_path = "data"
+github_output_main = "output"
+drive_output_main = r"C:\Users\ghisl\Google Drive UniBG\UniBG\CORSI\PhD\misure_arcadia\plots_articolo_arcadia\plots"
+TP_temp_slope_mean_vout = os.path.join(main_input_path, "TP_temp_slope_mean_vout")
+
 plot1_output_folder_drive = os.path.join(drive_output_main, "plot_1")
 plot1_output_folder_github = os.path.join(github_output_main, "plot_1")
 temperatures_str = [
