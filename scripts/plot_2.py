@@ -109,7 +109,8 @@ for direction in directions:
                 + str(direction)
                 + ".pdf",
             )
+
+            temp_counter = temp_counter + 1
+
         except Exception:
             pass
-
-    temp_counter = temp_counter + 1
