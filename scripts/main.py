@@ -46,10 +46,13 @@ TP = 1
 R0 = 7
 R2 = 7
 
+markers = ["o", "s", "v"]
+
 for TP in TPs:
     plt.clf()
     colors = distinctipy.get_colors(3)
     vin_index = 0
+    Volt_values = np.zeros(shape=(len(temperatures_int), 1))
     for Vin in Vins:
         temp_index = 0
         print("Vin: " + str(Vin))
@@ -70,23 +73,24 @@ for TP in TPs:
             Volt = data_plot1_Vin_TP_R0_R2["Volt"].mean()
             print("Temp: " + str(temp) + " -> " + str(Volt))
 
-            plt.plot(
-                temperatures_int[temp_index],
-                Volt,
-                linewidth=1.5,
-                marker="o",
-                markerfacecolor=colors[vin_index],
-                color=colors[vin_index],
-            )
-            plt.xticks(temperatures_int)
-
+            Volt_values[temp_index] = Volt
             temp_index = temp_index + 1
+
+        plt.plot(
+            temperatures_int,
+            Volt_values,
+            linewidth=1,
+            marker=markers[vin_index],
+            markerfacecolor=colors[vin_index],
+            color=colors[vin_index],
+        )
+        plt.xticks(temperatures_int)
 
         vin_index = vin_index + 1
 
-    Vin_0 = Line2D([0], [0], marker="o", color=colors[0], label="1.08 V")
-    Vin_1 = Line2D([0], [0], marker="o", color=colors[1], label="1.20 V")
-    Vin_2 = Line2D([0], [0], marker="o", color=colors[2], label="1.32 V")
+    Vin_0 = Line2D([0], [0], marker=markers[0], color=colors[0], label="1.08 V")
+    Vin_1 = Line2D([0], [0], marker=markers[1], color=colors[1], label="1.20 V")
+    Vin_2 = Line2D([0], [0], marker=markers[2], color=colors[2], label="1.32 V")
 
     plt.legend(handles=[Vin_0, Vin_1, Vin_2], title=r"\boldmath$V_{IN}$")
     plt.xlabel(r"Temperature [$^{\circ}$C]")
