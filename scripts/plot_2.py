@@ -53,6 +53,7 @@ markers = ["o", "s", "v", "^", "<", ">", "p", "*", "d", "D", "h", "H", 5, 6, 7, 
 
 # All TPs in one plot per temperature
 for direction in directions:
+    temp_counter = 0
     for temp in temperatures_str:
         try:
             plt.clf()
@@ -102,7 +103,13 @@ for direction in directions:
             print_plot(
                 plot2_output_folder_drive,
                 plot2_output_folder_github,
-                "plot_2_" + str(temp) + "C_" + str(direction) + ".pdf",
+                "plot_2_"
+                + str(temperatures_int[temp_counter])
+                + "C_"
+                + str(direction)
+                + ".pdf",
             )
         except Exception:
             pass
+
+    temp_counter = temp_counter + 1

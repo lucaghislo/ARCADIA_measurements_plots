@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 # TEX INTERPRETER
 # Interpreter set to LaTex
 plt.rcParams.update({"text.usetex": True, "font.family": "serif"})
+# plt.rc("text.latex", preamble=r"\usepackage{asmath}")
 
 # FIGURE
 # Font size
@@ -34,5 +35,12 @@ matplotlib.rcParams["legend.framealpha"] = 1
 matplotlib.rcParams["axes.labelsize"] = 12
 
 # GRID
+# Grid transparency
 matplotlib.rcParams["grid.alpha"] = 0.3
+# Grid linewidth
 matplotlib.rcParams["grid.linewidth"] = 0.7
+
+# SAVEFIG
+# White margins
+matplotlib.rcParams["savefig.bbox"] = "tight"
+matplotlib.rcParams["savefig.pad_inches"] = 0.05
