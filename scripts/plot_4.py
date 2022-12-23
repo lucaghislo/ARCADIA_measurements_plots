@@ -26,6 +26,7 @@ def compute_histogram_bins(data, desired_bin_size):
     bins = np.arange(
         min_boundary, min_boundary + n_bins * desired_bin_size, desired_bin_size
     )
+
     return bins
 
 
