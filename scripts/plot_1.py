@@ -92,9 +92,9 @@ for TP in TPs:
     plt.xlabel(r"Temperature [$^{\circ}$C]")
     plt.ylabel(r"$V_{OUT}$ [V]")
     plt.title(
-        r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every} \boldmath$V_{IN}$ \boldmath$(TP_{"
+        r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every} \boldmath$V_{IN}$ \textbf{(TP"
         + str(TP)
-        + r"})$"
+        + r")}"
     )
     print_plot(
         output_folder_drive,
