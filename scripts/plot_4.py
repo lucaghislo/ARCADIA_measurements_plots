@@ -115,7 +115,7 @@ for temp in temperatures_str:
         + " V",
         fontsize=13,
         verticalalignment="top",
-        bbox=dict(facecolor="white", edgecolor="black"),
+        bbox=dict(facecolor="white", edgecolor="#cdcdcd", boxstyle="round,pad=0.35"),
     )
 
     plt.grid()
