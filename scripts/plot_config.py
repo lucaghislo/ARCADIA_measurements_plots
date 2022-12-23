@@ -27,7 +27,12 @@ matplotlib.rcParams["ytick.labelsize"] = 12
 # LEGEND
 # Legend font size
 matplotlib.rcParams["legend.fontsize"] = 12
+matplotlib.rcParams["legend.framealpha"] = 1
 
 # AXIS
 # Label size
 matplotlib.rcParams["axes.labelsize"] = 12
+
+# GRID
+matplotlib.rcParams["grid.alpha"] = 0.3
+matplotlib.rcParams["grid.linewidth"] = 0.7

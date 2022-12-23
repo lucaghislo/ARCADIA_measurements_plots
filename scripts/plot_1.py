@@ -24,7 +24,6 @@ TP_temp_slope_mean_vout = os.path.join(main_input_path, "TP_temp_slope_mean_vout
 # Per un BGR, Vout vs T (R0 e R2 a 0111 e 0111) per i tre valori di Vdd usati nelle misure (1.08V, 1.2V, 1.32V).
 plot1_output_folder_drive = os.path.join(drive_output_main, "plot_1")
 plot1_output_folder_github = os.path.join(github_output_main, "plot_1")
-direction = "UP"
 temperatures_str = [
     "m40",
     "m30",
@@ -42,7 +41,6 @@ temperatures_str = [
 temperatures_int = [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70]
 TPs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 Vins = [1.08, 1.2, 1.32]
-TP = 1
 R0 = 7
 R2 = 7
 
