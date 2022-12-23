@@ -2,48 +2,102 @@ import os.path
 import pandas as pd
 import numpy as np
 import matplotlib
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 from distinctipy import distinctipy
+from matplotlib.lines import Line2D
+
+from plot_config import *
+from save_figure import *
 
 main_input_path = "data"
 github_output_main = "output"
 drive_output_main = r"C:\Users\ghisl\Google Drive UniBG\UniBG\CORSI\PhD\misure_arcadia\plots_articolo_arcadia\plots"
+TP_temp_vin_vout = os.path.join(main_input_path, "TP_temp_vin_vout")
+TP_temp_slope_mean_vout = os.path.join(main_input_path, "TP_temp_slope_mean_vout")
+
+# RO: slope
+# R1: mean
 
 # PLOT 1
 # Per un BGR, Vout vs T (R0 e R2 a 0111 e 0111) per i tre valori di Vdd usati nelle misure (1.08V, 1.2V, 1.32V).
+plot1_output_folder_drive = os.path.join(drive_output_main, "plot_1")
+plot1_output_folder_github = os.path.join(github_output_main, "plot_1")
+direction = "UP"
+temperatures_str = [
+    "m40",
+    "m30",
+    "m20",
+    "m10",
+    "0",
+    "10",
+    "20",
+    "30",
+    "40",
+    "50",
+    "60",
+    "70",
+]
+temperatures_int = [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70]
+TPs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+Vins = [1.08, 1.2, 1.32]
+TP = 1
+R0 = 7
+R2 = 7
 
-# PLOT 2
-# Vout vs Vdd (da 0 a 1.32V) dei 16 bandgap (R0 e R2 a 0111 e 0111) a T=20°C.
+for TP in TPs:
+    plt.clf()
+    colors = distinctipy.get_colors(3)
+    vin_index = 0
+    for Vin in Vins:
+        temp_index = 0
+        print("Vin: " + str(Vin))
+        for temp in temperatures_str:
+            data_plot1 = pd.read_csv(
+                os.path.join(
+                    TP_temp_slope_mean_vout,
+                    "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+                )
+            )
 
-# PLOT 3
-# Per un BGR, Vout vs Vdd (R0 e R2 a 0111 e 0111) per 3 temperature differenti (-40°C, 20°C, 70°C).
+            data_plot1_Vin = data_plot1[data_plot1["Vin"] == Vin]
+            data_plot1_Vin_TP = data_plot1_Vin[data_plot1_Vin["TP"] == TP]
+            data_plot1_Vin_TP_R0 = data_plot1_Vin_TP[data_plot1_Vin_TP["SLOPE"] == R0]
+            data_plot1_Vin_TP_R0_R2 = data_plot1_Vin_TP_R0[
+                data_plot1_Vin_TP_R0["MEAN"] == R2
+            ]
+            Volt = data_plot1_Vin_TP_R0_R2["Volt"].mean()
+            print("Temp: " + str(temp) + " -> " + str(Volt))
 
-# PLOT 4
-# Si considerino solo le misure a 1.2V.
-# Istogramma delle tensioni Vout dei 16 bandgap ottenute a 20°C con registri di configurazione di R0 e R2 a 0111 e 0111.
-# Si può valutare si sovrapporre un fit con una gaussiana... dipende da come viene, comunque nel plot evidenzierei il valor medio e la sigma (ottenute dai dati e non dal fit).
+            plt.plot(
+                temperatures_int[temp_index],
+                Volt,
+                linewidth=1.5,
+                marker="o",
+                markerfacecolor=colors[vin_index],
+                color=colors[vin_index],
+            )
+            plt.xticks(temperatures_int)
 
-# PLOT 5
-# Si considerino solo le misure a 1.2V.
-# Istogramma delle tensioni Vout dei 16 bandgap ottenute a 20°C con registri di configurazione a 0111 per R0 mentre per R2 si va a cercare il valore che rende Vout più vicino a 600mV.
-# L'idea è quella di mostrare che agendo su un trimming è possibile compensare la tensione d'uscita del bandgap. Anche qui è interessante vedere mu e sigma.
+            temp_index = temp_index + 1
 
-# PLOT 6
-# Si considerino solo le misure a 1.2V.
-# Plot delle 16 misure Vout vs T con R0 e R2 a 0111 e 0111. Stesso plot ma trimmato da R0 (in temperatura).
-# Come si ottiene? Per ogni bandgap, si hanno 16 Temperature Coefficient, uno per ogni valore di R0. Si sceglie quello minore.
+        vin_index = vin_index + 1
 
-# PLOT 7
-# Si considerino solo le misure a 1.2V.
-# Plot delle 16 misure Vout vs T con R0 e R2 a 0111 e 0111. Stesso plot ma trimmato.
-# Come si ottiene? Per ogni bandgap, per ogni temperatura, si va a cercare fra le 256 misure, quella che ha una Vout più vicina a 600mV.
+    Vin_0 = Line2D([0], [0], marker="o", color=colors[0], label="1.08 V")
+    Vin_1 = Line2D([0], [0], marker="o", color=colors[1], label="1.20 V")
+    Vin_2 = Line2D([0], [0], marker="o", color=colors[2], label="1.32 V")
 
-# PLOT 8
-# Si considerino solo le misure a 1.2V.
-# Vout vs configuration bits (da 0 a 11111111) a temperatura ambiente.
-
-# PLOT 9
-# Si considerino solo le misure a 1.2V.
-# Vout vs T dove ogni punto è il mean dei 16 bandgap e ad esso è associata una banda di errore ampia +- una sigma calcolata sulle 16 misure a quella temperatura.
-# Due plot, uno trimmato sia in R0 che in R2 e uno no (a 0111 e 0111).
+    plt.legend(handles=[Vin_0, Vin_1, Vin_2], title=r"\boldmath$V_{IN}$")
+    plt.xlabel(r"Temperature [$^{\circ}$C]")
+    plt.ylabel(r"$V_{OUT}$ [V]")
+    plt.title(
+        r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every} \boldmath$V_{IN}$ \boldmath$(TP_{"
+        + str(TP)
+        + r"})$"
+    )
+    print_plot(
+        plot1_output_folder_drive,
+        plot1_output_folder_github,
+        "plot_1_TP" + str(TP) + ".pdf",
+    )
