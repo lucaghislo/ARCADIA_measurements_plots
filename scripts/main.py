@@ -1,0 +1,49 @@
+import os.path
+import pandas as pd
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+from distinctipy import distinctipy
+
+main_input_path = "data"
+github_output_main = "output"
+drive_output_main = r"C:\Users\ghisl\Google Drive UniBG\UniBG\CORSI\PhD\misure_arcadia\plots_articolo_arcadia\plots"
+
+# PLOT 1
+# Per un BGR, Vout vs T (R0 e R2 a 0111 e 0111) per i tre valori di Vdd usati nelle misure (1.08V, 1.2V, 1.32V).
+
+# PLOT 2
+# Vout vs Vdd (da 0 a 1.32V) dei 16 bandgap (R0 e R2 a 0111 e 0111) a T=20°C.
+
+# PLOT 3
+# Per un BGR, Vout vs Vdd (R0 e R2 a 0111 e 0111) per 3 temperature differenti (-40°C, 20°C, 70°C).
+
+# PLOT 4
+# Si considerino solo le misure a 1.2V.
+# Istogramma delle tensioni Vout dei 16 bandgap ottenute a 20°C con registri di configurazione di R0 e R2 a 0111 e 0111.
+# Si può valutare si sovrapporre un fit con una gaussiana... dipende da come viene, comunque nel plot evidenzierei il valor medio e la sigma (ottenute dai dati e non dal fit).
+
+# PLOT 5
+# Si considerino solo le misure a 1.2V.
+# Istogramma delle tensioni Vout dei 16 bandgap ottenute a 20°C con registri di configurazione a 0111 per R0 mentre per R2 si va a cercare il valore che rende Vout più vicino a 600mV.
+# L'idea è quella di mostrare che agendo su un trimming è possibile compensare la tensione d'uscita del bandgap. Anche qui è interessante vedere mu e sigma.
+
+# PLOT 6
+# Si considerino solo le misure a 1.2V.
+# Plot delle 16 misure Vout vs T con R0 e R2 a 0111 e 0111. Stesso plot ma trimmato da R0 (in temperatura).
+# Come si ottiene? Per ogni bandgap, si hanno 16 Temperature Coefficient, uno per ogni valore di R0. Si sceglie quello minore.
+
+# PLOT 7
+# Si considerino solo le misure a 1.2V.
+# Plot delle 16 misure Vout vs T con R0 e R2 a 0111 e 0111. Stesso plot ma trimmato.
+# Come si ottiene? Per ogni bandgap, per ogni temperatura, si va a cercare fra le 256 misure, quella che ha una Vout più vicina a 600mV.
+
+# PLOT 8
+# Si considerino solo le misure a 1.2V.
+# Vout vs configuration bits (da 0 a 11111111) a temperatura ambiente.
+
+# PLOT 9
+# Si considerino solo le misure a 1.2V.
+# Vout vs T dove ogni punto è il mean dei 16 bandgap e ad esso è associata una banda di errore ampia +- una sigma calcolata sulle 16 misure a quella temperatura.
+# Due plot, uno trimmato sia in R0 che in R2 e uno no (a 0111 e 0111).
