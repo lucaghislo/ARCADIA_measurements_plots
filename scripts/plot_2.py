@@ -86,7 +86,7 @@ for direction in directions:
                     linestyle="-" if TP_index < len(markers) / 2 else "--",
                     marker=markers[TP_index],
                     markersize=3,
-                    label="TP" + str(TP),
+                    label=str(TP),
                 )
                 TP_index = TP_index + 1
 
