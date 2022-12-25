@@ -58,7 +58,6 @@ Vin = 1.20
 R0 = 7
 R2 = 7
 
-temp = 20
 temp_index = 0
 for temp in temperatures_str:
     Volt_values = np.zeros(shape=(len(TPs), 1))
@@ -71,13 +70,13 @@ for temp in temperatures_str:
             )
         )
 
-        data_plot1_Vin = data_plot4[data_plot4["Vin"] == Vin]
-        data_plot1_Vin_TP = data_plot1_Vin[data_plot1_Vin["TP"] == TP]
-        data_plot1_Vin_TP_R0 = data_plot1_Vin_TP[data_plot1_Vin_TP["SLOPE"] == R0]
-        data_plot1_Vin_TP_R0_R2 = data_plot1_Vin_TP_R0[
-            data_plot1_Vin_TP_R0["MEAN"] == R2
+        data_plot4_Vin = data_plot4[data_plot4["Vin"] == Vin]
+        data_plot1_Vin_TP = data_plot4_Vin[data_plot4_Vin["TP"] == TP]
+        data_plot4_Vin_TP_R0 = data_plot1_Vin_TP[data_plot1_Vin_TP["SLOPE"] == R0]
+        data_plot4_Vin_TP_R0_R2 = data_plot4_Vin_TP_R0[
+            data_plot4_Vin_TP_R0["MEAN"] == R2
         ]
-        Volt = data_plot1_Vin_TP_R0_R2["Volt"].mean()
+        Volt = data_plot4_Vin_TP_R0_R2["Volt"].mean()
 
         Volt_values[TP_index] = Volt
         TP_index = TP_index + 1
@@ -109,9 +108,9 @@ for temp in temperatures_str:
         min(bins) - bin_width / 2,
         int(max(n)),
         "$\mu$ = "
-        + str(round(mu, 2))
+        + str(round(mu, 5))
         + " V\n $\sigma$ = "
-        + str(round(sigma, 2))
+        + str(round(sigma, 5))
         + " V",
         fontsize=13,
         verticalalignment="top",
@@ -127,3 +126,28 @@ for temp in temperatures_str:
     )
 
     temp_index = temp_index + 1
+
+
+def get_standard_Volt(temp):
+    Volt_values = np.zeros(shape=(len(TPs), 1))
+    TP_index = 0
+    for TP in TPs:
+        data_plot4 = pd.read_csv(
+            os.path.join(
+                TP_temp_slope_mean_vout,
+                "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+            )
+        )
+
+        data_plot4_Vin = data_plot4[data_plot4["Vin"] == Vin]
+        data_plot1_Vin_TP = data_plot4_Vin[data_plot4_Vin["TP"] == TP]
+        data_plot4_Vin_TP_R0 = data_plot1_Vin_TP[data_plot1_Vin_TP["SLOPE"] == R0]
+        data_plot4_Vin_TP_R0_R2 = data_plot4_Vin_TP_R0[
+            data_plot4_Vin_TP_R0["MEAN"] == R2
+        ]
+        Volt = data_plot4_Vin_TP_R0_R2["Volt"].mean()
+
+        Volt_values[TP_index] = Volt
+        TP_index = TP_index + 1
+
+    return Volt_values
