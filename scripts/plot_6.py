@@ -171,7 +171,7 @@ plt.xticks(temperatures_int)
 plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
 plt.grid()
 
-# print_plot(output_folder_drive, output_folder_github, "plot_6_optimized_R0.pdf")
+print_plot(output_folder_drive, output_folder_github, "plot_6_optimized_R0.pdf")
 
 # Save mean and slope estimate
 filename = "mean_slope_optimized_R0.dat"
