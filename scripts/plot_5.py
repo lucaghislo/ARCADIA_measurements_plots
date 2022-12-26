@@ -63,14 +63,14 @@ for temp in temperatures_str:
     Volt_values = np.zeros(shape=(len(TPs), 1))
     TP_index = 0
     for TP in TPs:
-        data_plot4 = pd.read_csv(
+        data_plot6 = pd.read_csv(
             os.path.join(
                 TP_temp_slope_mean_vout,
                 "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
             )
         )
 
-        data_plot5_Vin = data_plot4[data_plot4["Vin"] == Vin]
+        data_plot5_Vin = data_plot6[data_plot6["Vin"] == Vin]
         data_plot5_Vin_TP = data_plot5_Vin[data_plot5_Vin["TP"] == TP]
 
         # Select standard SLOPE (R0 = 0111 = 7)

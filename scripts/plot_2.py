@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from distinctipy import distinctipy
-from matplotlib.lines import Line2D
 
 from plot_config import *
 from save_figure import *

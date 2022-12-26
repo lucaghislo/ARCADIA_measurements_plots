@@ -2,8 +2,6 @@ import os.path
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from distinctipy import distinctipy
-from matplotlib.lines import Line2D
 from scipy.stats import norm
 
 
@@ -63,20 +61,20 @@ for temp in temperatures_str:
     Volt_values = np.zeros(shape=(len(TPs), 1))
     TP_index = 0
     for TP in TPs:
-        data_plot4 = pd.read_csv(
+        data_plot6 = pd.read_csv(
             os.path.join(
                 TP_temp_slope_mean_vout,
                 "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
             )
         )
 
-        data_plot4_Vin = data_plot4[data_plot4["Vin"] == Vin]
-        data_plot1_Vin_TP = data_plot4_Vin[data_plot4_Vin["TP"] == TP]
-        data_plot4_Vin_TP_R0 = data_plot1_Vin_TP[data_plot1_Vin_TP["SLOPE"] == R0]
-        data_plot4_Vin_TP_R0_R2 = data_plot4_Vin_TP_R0[
-            data_plot4_Vin_TP_R0["MEAN"] == R2
+        data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+        data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+        data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[data_plot6_Vin_TP["SLOPE"] == R0]
+        data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+            data_plot6_Vin_TP_R0["MEAN"] == R2
         ]
-        Volt = data_plot4_Vin_TP_R0_R2["Volt"].mean()
+        Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
 
         Volt_values[TP_index] = Volt
         TP_index = TP_index + 1
