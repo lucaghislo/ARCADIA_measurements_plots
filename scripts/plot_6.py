@@ -171,4 +171,39 @@ plt.xticks(temperatures_int)
 plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
 plt.grid()
 
-print_plot(output_folder_drive, output_folder_github, "plot_6_optimized_R0.pdf")
+# print_plot(output_folder_drive, output_folder_github, "plot_6_optimized_R0.pdf")
+
+# Save mean and slope estimate
+filename = "mean_slope_optimized_R0.dat"
+txt_filepath_drive = os.path.join(output_folder_drive, filename)
+txt_filepath_github = os.path.join(output_folder_github, filename)
+
+with open(
+    txt_filepath_drive,
+    "w",
+) as fp:
+    counter = 1
+    fp.write("TP\tR0\tR2\n")
+    for item in TC_TP_mean_slope:
+        fp.write(
+            str(str(counter) + "\t" + str(int(item[0])))
+            + "\t"
+            + str(int(item[1]))
+            + "\n"
+        )
+        counter = counter + 1
+
+with open(
+    txt_filepath_github,
+    "w",
+) as fp:
+    counter = 1
+    fp.write("TP\tR0\tR2\n")
+    for item in TC_TP_mean_slope:
+        fp.write(
+            str(str(counter) + "\t" + str(int(item[0])))
+            + "\t"
+            + str(int(item[1]))
+            + "\n"
+        )
+        counter = counter + 1
