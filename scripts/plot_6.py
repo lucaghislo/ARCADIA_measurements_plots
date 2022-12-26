@@ -108,7 +108,7 @@ TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
 
 TP_index = 0
 for TP in TPs:
-    all_R2 = data_TC_raw[TP_index + 2]
+    all_R2 = data_TC_raw[TP_index + 1]
     TC_single_TP = data_TC_raw.iloc[all_R2.index[all_R2 == R2].to_list()][
         [TP_index, TP_index + 1, TP_index + 2]
     ]
@@ -165,7 +165,7 @@ for TP in TPs:
 plt.xlabel(r"Temperature [$^{\circ}$C]")
 plt.ylabel(r"$V_{OUT}$ [V]")
 plt.title(
-    r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (optimal R0 and R2)}"
+    r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (optimal R0)}"
 )
 plt.xticks(temperatures_int)
 plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
