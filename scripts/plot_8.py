@@ -104,7 +104,7 @@ for temp in temperatures_str:
 
         TP_index = TP_index + 1
 
-    plt.xlabel("Configuration bits")
+    plt.xlabel("Configuration bits [(00000000)$_{2}$ - (11111111)$_{2}$]")
     plt.ylabel(r"$V_{OUT}$ [V]")
     plt.title(
         r"\boldmath$V_{OUT}$ \textbf{vs configuration bits at "
