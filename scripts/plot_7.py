@@ -156,6 +156,7 @@ for TP in TPs:
         markerfacecolor=colors[TP_index],
         color=colors[TP_index],
         label=str(TP_index + 1),
+        linestyle="-" if TP_index < len(markers) / 2 else "--",
     )
 
     TP_index = TP_index + 1
