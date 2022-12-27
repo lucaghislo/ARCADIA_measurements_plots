@@ -149,8 +149,6 @@ for TP in TPs:
                 )
                 counter = counter + 1
 
-    print(volt_values)
-
     plt.plot(
         temperatures_int,
         volt_values,
