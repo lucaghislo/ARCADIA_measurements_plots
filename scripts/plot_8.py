@@ -168,7 +168,7 @@ for TP in TPs:
             linewidth=1,
             markersize=3,
             label=str(temperatures_int[temp_index]) + r" $^{\circ}$C",
-            linestyle="-" if TP_index < len(markers) / 2 else "--",
+            linestyle="-" if temp_index < 6 else "--",
             marker=markers[temp_index],
         )
 
