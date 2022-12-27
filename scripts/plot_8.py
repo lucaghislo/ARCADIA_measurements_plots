@@ -97,7 +97,7 @@ for temp in temperatures_str:
             volt_values,
             linewidth=1,
             markersize=3,
-            label=str(TP_index),
+            label=str(TP_index + 1),
             linestyle="-" if TP_index < len(markers) / 2 else "--",
             marker=markers[TP_index],
         )
