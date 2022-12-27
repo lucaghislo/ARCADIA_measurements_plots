@@ -103,11 +103,11 @@ plt.ylabel(r"$V_{OUT}$ [V]")
 plt.title(r"\textbf{Mean} \boldmath$V_{OUT}$ \textbf{vs temperature}")
 plt.grid()
 
-# print_plot(
-#     output_folder_drive,
-#     output_folder_github,
-#     "plot_9.pdf",
-# )
+print_plot(
+    output_folder_drive,
+    output_folder_github,
+    "plot_9.pdf",
+)
 
 optimal_R0_R2 = pd.read_csv(r"output\plot_6\mean_slope_optimized_R0_R2.dat", sep="\t")
 print(optimal_R0_R2)
