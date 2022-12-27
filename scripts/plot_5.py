@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm
 from matplotlib.artist import Artist
 
-
 from plot_config import *
 from save_figure import *
 from plot_4 import *

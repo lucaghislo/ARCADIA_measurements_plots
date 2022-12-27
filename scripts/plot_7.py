@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from distinctipy import distinctipy
 
-
 from plot_config import *
 from save_figure import *
 
