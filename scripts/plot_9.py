@@ -94,10 +94,10 @@ plt.errorbar(
     color="limegreen",
 )
 plt.xticks(np.arange(-40, 80, 10))
-min_y = volt_ref - 0.05
-max_y = volt_ref + 0.05
+min_y = volt_ref - 0.07
+max_y = volt_ref + 0.07
 plt.ylim(min_y, max_y)
-plt.yticks(np.arange(min_y, max_y, 0.01))
+plt.yticks(np.arange(min_y, max_y + 0.01, 0.01))
 plt.xlabel(r"Temperature [$^{\circ}$C]")
 plt.ylabel(r"$V_{OUT}$ [V]")
 plt.title(r"\textbf{Mean} \boldmath$V_{OUT}$ \textbf{vs temperature}")
@@ -107,4 +107,74 @@ print_plot(
     output_folder_drive,
     output_folder_github,
     "plot_9.pdf",
+)
+
+optimal_R0_R2 = pd.read_csv(r"output\plot_6\mean_slope_optimized_R0_R2.dat", sep="\t")
+print(optimal_R0_R2)
+
+mean_values = np.zeros(shape=(len(temperatures_str), 1))
+sigma_values = np.zeros(shape=(len(temperatures_str), 1))
+temp_index = 0
+for temp in temperatures_str:
+    Volt_values = np.zeros(shape=(len(TPs), 1))
+    TP_index = 0
+    for TP in TPs:
+        data_plot9 = pd.read_csv(
+            os.path.join(
+                TP_temp_slope_mean_vout,
+                "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+            )
+        )
+
+        R0 = optimal_R0_R2.iloc[TP - 1]["R0"]
+        R2 = optimal_R0_R2.iloc[TP - 1]["R2"]
+
+        data_plot9_Vin = data_plot9[data_plot9["Vin"] == Vin]
+        data_plot8_Vin_TP = data_plot9_Vin[data_plot9_Vin["TP"] == TP]
+        data_plot9_Vin_TP_R0 = data_plot8_Vin_TP[data_plot8_Vin_TP["SLOPE"] == R2]
+        data_plot9_Vin_TP_R0_R2 = data_plot9_Vin_TP_R0[
+            data_plot9_Vin_TP_R0["MEAN"] == R0
+        ]
+        Volt = data_plot9_Vin_TP_R0_R2["Volt"].mean()
+
+        Volt_values[TP_index] = Volt
+        TP_index = TP_index + 1
+
+    mean = np.mean(Volt_values)
+    sigma = np.std(Volt_values)
+
+    mean_values[temp_index] = mean
+    sigma_values[temp_index] = sigma
+
+    temp_index = temp_index + 1
+
+mean_values = np.transpose(mean_values)[0]
+sigma_values = np.transpose(sigma_values)[0]
+
+plt.clf()
+plt.errorbar(
+    temperatures_int,
+    mean_values,
+    yerr=sigma_values,
+    marker="o",
+    markersize=4,
+    capsize=4,
+    color="orangered",
+)
+plt.xticks(np.arange(-40, 80, 10))
+min_y = volt_ref - 0.07
+max_y = volt_ref + 0.07
+plt.ylim(min_y, max_y)
+plt.yticks(np.arange(min_y, max_y + 0.01, 0.01))
+plt.xlabel(r"Temperature [$^{\circ}$C]")
+plt.ylabel(r"$V_{OUT}$ [V]")
+plt.title(
+    r"\textbf{Mean} \boldmath$V_{OUT}$ \textbf{vs temperature (optimal R0 and R2)}"
+)
+plt.grid()
+
+print_plot(
+    output_folder_drive,
+    output_folder_github,
+    "plot_9_optimized_R0_R2.pdf",
 )
