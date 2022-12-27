@@ -99,7 +99,7 @@ for TP in TPs:
         temp_index = temp_index + 1
 
         # Save estimated values
-        filename = "TP_" + str(TP) + "_values.dat"
+        filename = "TP" + str(TP) + "_values.dat"
         txt_filepath_drive = os.path.join(output_folder_drive, filename)
         txt_filepath_github = os.path.join(output_folder_github, filename)
 
@@ -115,7 +115,7 @@ for TP in TPs:
                     + "\t"
                     + str(float(volt_values[i]))
                     + "\t"
-                    + str(float(volt_values[i]))
+                    + str("{:.10f}".format(float(delta_values[i])))
                     + "\t"
                     + str(int(index_values[i]))
                     + "\t"
@@ -138,7 +138,7 @@ for TP in TPs:
                     + "\t"
                     + str(float(volt_values[i]))
                     + "\t"
-                    + str(float(volt_values[i]))
+                    + str("{:.10f}".format(float(delta_values[i])))
                     + "\t"
                     + str(int(index_values[i]))
                     + "\t"
