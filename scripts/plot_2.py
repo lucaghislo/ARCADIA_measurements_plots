@@ -94,7 +94,7 @@ for direction in directions:
             plt.ylabel(r"$V_{OUT}$ [V]")
             plt.title(
                 r"\boldmath$V_{OUT}$ \textbf{vs} \boldmath$V_{DD}$ \textbf{for all TPs at "
-                + str(temp)
+                + str(temperatures_int[temp_counter])
                 + r"°C ("
                 + str(direction)
                 + r")}"
