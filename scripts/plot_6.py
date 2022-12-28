@@ -8,6 +8,11 @@ from plot_config import *
 from save_figure import *
 
 
+# Get column from matrix
+def column(matrix, i):
+    return [row[i] for row in matrix]
+
+
 # PLOT 6
 # Si considerino solo le misure a 1.2V.
 # Plot delle 16 misure Vout vs T con R0 e R2 a 0111 e 0111. Stesso plot ma trimmato da R0 (in temperatura).
@@ -53,6 +58,7 @@ markers = ["o", "s", "v", "^", "<", ">", "p", "*", "d", "D", "h", "H", 5, 6, 7, 
 R0 = 7
 R2 = 7
 Vin = Vins[1]
+Volt_ref = 0.6
 
 plt.clf()
 TP_index = 0
@@ -432,49 +438,79 @@ TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
 data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
 TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
 
+R2_values = range(0, 8)
+R0_values = np.zeros(shape=(len(R2_values), len(TPs)))
 TP_index = 0
+TP_counter = 0
 for TP in TPs:
-    all_R2 = data_TC_raw[TP_index + 2]
-    TC_single_TP = data_TC_raw.iloc[all_R2.index[all_R2 == R2].to_list()][
-        [TP_index, TP_index + 1, TP_index + 2]
-    ]
+    R2_index = 0
+    for R2 in R2_values:
+        all_R2 = data_TC_raw[TP_index + 2]
+        TC_single_TP = data_TC_raw.iloc[all_R2.index[all_R2 == R2].to_list()][
+            [TP_index, TP_index + 1, TP_index + 2]
+        ]
 
-    min_index = TC_single_TP.index[
-        TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
-    ].to_list()[0]
-    min_mean = TC_single_TP.loc[min_index][TP_index + 1]
-    min_slope = TC_single_TP.loc[min_index][TP_index + 2]
-    TC_TP_mean_slope[TP - 1][0] = min_mean
-    TC_TP_mean_slope[TP - 1][1] = min_slope
+        min_index = TC_single_TP.index[
+            TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
+        ].to_list()[0]
+        min_mean = TC_single_TP.loc[min_index][TP_index + 1]
+        min_slope = TC_single_TP.loc[min_index][TP_index + 2]
+        TC_TP_mean_slope[TP - 1][0] = min_mean
+        TC_TP_mean_slope[TP - 1][1] = min_slope
 
+        R0_values[R2_index][TP_counter] = min_mean
+
+        R2_index = R2_index + 1
+
+        print(str(min_mean) + "\t" + str(min_slope))
+
+    print("")
     TP_index = TP_index + 3
+    TP_counter = TP_counter + 1
 
-print(TC_TP_mean_slope)
+print(R0_values)
+
 plt.clf()
 TP_index = 0
 for TP in TPs:
     Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
     temp_index = 0
     for temp in temperatures_str:
-        data_plot6 = pd.read_csv(
-            os.path.join(
-                TP_temp_slope_mean_vout,
-                "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+        R2 = 0
+        min_Volt_delta = 10 ** 5
+        best_Volt = 0
+        best_R2 = 0
+        R0_column = column(R0_values, TP_index)
+        print(R0_column)
+        for R0 in R0_column:
+            data_plot6 = pd.read_csv(
+                os.path.join(
+                    TP_temp_slope_mean_vout,
+                    "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+                )
             )
-        )
 
-        data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
-        data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
-        data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
-            data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
-        ]
-        data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
-            data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
-        ]
-        Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
+            data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+            data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+            data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[data_plot6_Vin_TP["SLOPE"] == R2]
+            data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+                data_plot6_Vin_TP_R0["MEAN"] == R0
+            ]
+            Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
 
-        Volt_values_TP[temp_index] = Volt
+            Volt_delta = abs(Volt_ref - Volt)
+            if Volt_delta < min_Volt_delta:
+                min_Volt_delta = Volt_delta
+                best_Volt = Volt
+                best_R2 = R2
+
+            R2 = R2 + 1
+
+        TC_TP_mean_slope[TP - 1][1] = best_R2
+        Volt_values_TP[temp_index] = best_Volt
         temp_index = temp_index + 1
+
+    print(Volt_values_TP)
 
     plt.plot(
         temperatures_int,
