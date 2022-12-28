@@ -528,7 +528,7 @@ for TP in TPs:
 plt.xlabel(r"Temperature [$^{\circ}$C]")
 plt.ylabel(r"$V_{OUT}$ [V]")
 plt.title(
-    r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (R2 nearest to 600 mV )}"
+    r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (R2 nearest to 600 mV)}"
 )
 plt.xticks(temperatures_int)
 plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
