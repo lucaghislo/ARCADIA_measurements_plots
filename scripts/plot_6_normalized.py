@@ -132,331 +132,451 @@ print_plot(output_folder_drive, output_folder_github, "plot_6_normalized.pdf")
 
 # # Select best TP and optimize R0 maintaining R2 standard
 # # Optimize R0 and R2 fixed to 7
-# TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
-# data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
-# TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
+TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
+data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
+TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
 
-# TP_index = 0
-# for TP in TPs:
-#     all_R2 = data_TC_raw[TP_index + 2]
-#     TC_single_TP = data_TC_raw.iloc[all_R2.index[all_R2 == R2].to_list()][
-#         [TP_index, TP_index + 1, TP_index + 2]
-#     ]
+TP_index = 0
+for TP in TPs:
+    all_R2 = data_TC_raw[TP_index + 2]
+    TC_single_TP = data_TC_raw.iloc[all_R2.index[all_R2 == R2].to_list()][
+        [TP_index, TP_index + 1, TP_index + 2]
+    ]
 
-#     min_index = TC_single_TP.index[
-#         TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
-#     ].to_list()[0]
-#     min_mean = TC_single_TP.loc[min_index][TP_index + 1]
-#     min_slope = TC_single_TP.loc[min_index][TP_index + 2]
-#     TC_TP_mean_slope[TP - 1][0] = min_mean
-#     TC_TP_mean_slope[TP - 1][1] = min_slope
+    min_index = TC_single_TP.index[
+        TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
+    ].to_list()[0]
+    min_mean = TC_single_TP.loc[min_index][TP_index + 1]
+    min_slope = TC_single_TP.loc[min_index][TP_index + 2]
+    TC_TP_mean_slope[TP - 1][0] = min_mean
+    TC_TP_mean_slope[TP - 1][1] = min_slope
 
-#     TP_index = TP_index + 3
+    TP_index = TP_index + 3
 
-# print(TC_TP_mean_slope)
-# plt.clf()
-# TP_index = 0
-# for TP in TPs:
-#     Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
-#     temp_index = 0
-#     for temp in temperatures_str:
-#         data_plot6 = pd.read_csv(
-#             os.path.join(
-#                 TP_temp_slope_mean_vout,
-#                 "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
-#             )
-#         )
+print(TC_TP_mean_slope)
 
-#         data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
-#         data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
-#         data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
-#             data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
-#         ]
-#         data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
-#             data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
-#         ]
-#         Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
+# Select Vout for each TP at 30 °C
+Volt_values_TP_30C = np.zeros(shape=(len(TPs), 1))
+temp = "30"
+TP_index = 0
+for TP in TPs:
+    data_plot6 = pd.read_csv(
+        os.path.join(
+            TP_temp_slope_mean_vout,
+            "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+        )
+    )
 
-#         Volt_values_TP[temp_index] = Volt
-#         temp_index = temp_index + 1
+    data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+    data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+    data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
+        data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
+    ]
+    data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+        data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
+    ]
+    Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
 
-#     plt.plot(
-#         temperatures_int,
-#         Volt_values_TP,
-#         linewidth=1,
-#         marker=markers[TP_index],
-#         markerfacecolor=colors[TP_index],
-#         color=colors[TP_index],
-#         label=str(TP_index + 1),
-#         linestyle="-" if TP_index < len(markers) / 2 else "--",
-#     )
+    Volt_values_TP_30C[TP_index] = Volt
+    TP_index = TP_index + 1
 
-#     TP_index = TP_index + 1
+print(Volt_values_TP_30C)
 
-# plt.xlabel(r"Temperature [$^{\circ}$C]")
-# plt.ylabel(r"$V_{OUT}$ [V]")
-# plt.title(
-#     r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (optimal R0)}"
-# )
-# plt.xticks(temperatures_int)
-# plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
-# plt.grid()
+plt.clf()
+TP_index = 0
+for TP in TPs:
+    Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
+    temp_index = 0
+    for temp in temperatures_str:
+        data_plot6 = pd.read_csv(
+            os.path.join(
+                TP_temp_slope_mean_vout,
+                "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+            )
+        )
 
-# print_plot(
-#     output_folder_drive, output_folder_github, "plot_6_optimized_R0_normalized.pdf"
-# )
+        data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+        data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+        data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
+            data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
+        ]
+        data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+            data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
+        ]
+        Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean() / Volt_values_TP_30C[TP_index]
 
+        Volt_values_TP[temp_index] = Volt
+        temp_index = temp_index + 1
 
-# # Optimize R2 and R0 fixed to 7
-# TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
-# data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
-# TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
+    plt.plot(
+        temperatures_int,
+        Volt_values_TP,
+        linewidth=1,
+        marker=markers[TP_index],
+        markerfacecolor=colors[TP_index],
+        color=colors[TP_index],
+        label=str(TP_index + 1),
+        linestyle="-" if TP_index < len(markers) / 2 else "--",
+    )
 
-# TP_index = 0
-# for TP in TPs:
-#     all_R0 = data_TC_raw[TP_index + 1]
-#     TC_single_TP = data_TC_raw.iloc[all_R0.index[all_R0 == R0].to_list()][
-#         [TP_index, TP_index + 1, TP_index + 2]
-#     ]
+    TP_index = TP_index + 1
 
-#     min_index = TC_single_TP.index[
-#         TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
-#     ].to_list()[0]
-#     min_mean = TC_single_TP.loc[min_index][TP_index + 1]
-#     min_slope = TC_single_TP.loc[min_index][TP_index + 2]
-#     TC_TP_mean_slope[TP - 1][0] = min_mean
-#     TC_TP_mean_slope[TP - 1][1] = min_slope
+plt.xlabel(r"Temperature [$^{\circ}$C]")
+plt.ylabel(r"$V_{OUT}$ [V]")
+plt.title(
+    r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (optimal R0)}"
+)
+plt.xticks(temperatures_int)
+plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
+plt.grid()
 
-#     TP_index = TP_index + 3
-
-# print(TC_TP_mean_slope)
-# plt.clf()
-# TP_index = 0
-# for TP in TPs:
-#     Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
-#     temp_index = 0
-#     for temp in temperatures_str:
-#         data_plot6 = pd.read_csv(
-#             os.path.join(
-#                 TP_temp_slope_mean_vout,
-#                 "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
-#             )
-#         )
-
-#         data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
-#         data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
-#         data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
-#             data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
-#         ]
-#         data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
-#             data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
-#         ]
-#         Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
-
-#         Volt_values_TP[temp_index] = Volt
-#         temp_index = temp_index + 1
-
-#     plt.plot(
-#         temperatures_int,
-#         Volt_values_TP,
-#         linewidth=1,
-#         marker=markers[TP_index],
-#         markerfacecolor=colors[TP_index],
-#         color=colors[TP_index],
-#         label=str(TP_index + 1),
-#         linestyle="-" if TP_index < len(markers) / 2 else "--",
-#     )
-
-#     TP_index = TP_index + 1
-
-# plt.xlabel(r"Temperature [$^{\circ}$C]")
-# plt.ylabel(r"$V_{OUT}$ [V]")
-# plt.title(
-#     r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (optimal R2)}"
-# )
-# plt.xticks(temperatures_int)
-# plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
-# plt.grid()
-
-# print_plot(
-#     output_folder_drive, output_folder_github, "plot_6_optimized_R2_normalized.pdf"
-# )
+print_plot(
+    output_folder_drive, output_folder_github, "plot_6_optimized_R0_normalized.pdf"
+)
 
 
-# # Optimize R0 and R2
-# TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
-# data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
-# TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
+# Optimize R2 and R0 fixed to 7
+TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
+data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
+TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
 
-# TP_index = 0
-# for TP in TPs:
-#     TC_single_TP = data_TC_raw[[TP_index, TP_index + 1, TP_index + 2]]
+TP_index = 0
+for TP in TPs:
+    all_R0 = data_TC_raw[TP_index + 1]
+    TC_single_TP = data_TC_raw.iloc[all_R0.index[all_R0 == R0].to_list()][
+        [TP_index, TP_index + 1, TP_index + 2]
+    ]
 
-#     min_index = TC_single_TP.index[
-#         TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
-#     ].to_list()[0]
-#     min_mean = TC_single_TP.loc[min_index][TP_index + 1]
-#     min_slope = TC_single_TP.loc[min_index][TP_index + 2]
-#     TC_TP_mean_slope[TP - 1][0] = min_mean
-#     TC_TP_mean_slope[TP - 1][1] = min_slope
+    min_index = TC_single_TP.index[
+        TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
+    ].to_list()[0]
+    min_mean = TC_single_TP.loc[min_index][TP_index + 1]
+    min_slope = TC_single_TP.loc[min_index][TP_index + 2]
+    TC_TP_mean_slope[TP - 1][0] = min_mean
+    TC_TP_mean_slope[TP - 1][1] = min_slope
 
-#     TP_index = TP_index + 3
+    TP_index = TP_index + 3
 
-# print(TC_TP_mean_slope)
-# plt.clf()
-# TP_index = 0
-# for TP in TPs:
-#     Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
-#     temp_index = 0
-#     for temp in temperatures_str:
-#         data_plot6 = pd.read_csv(
-#             os.path.join(
-#                 TP_temp_slope_mean_vout,
-#                 "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
-#             )
-#         )
+print(TC_TP_mean_slope)
 
-#         data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
-#         data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
-#         data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
-#             data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
-#         ]
-#         data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
-#             data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
-#         ]
-#         Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
+# Select Vout for each TP at 30 °C
+Volt_values_TP_30C = np.zeros(shape=(len(TPs), 1))
+temp = "30"
+TP_index = 0
+for TP in TPs:
+    data_plot6 = pd.read_csv(
+        os.path.join(
+            TP_temp_slope_mean_vout,
+            "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+        )
+    )
 
-#         Volt_values_TP[temp_index] = Volt
-#         temp_index = temp_index + 1
+    data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+    data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+    data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
+        data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
+    ]
+    data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+        data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
+    ]
+    Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
 
-#     plt.plot(
-#         temperatures_int,
-#         Volt_values_TP,
-#         linewidth=1,
-#         marker=markers[TP_index],
-#         markerfacecolor=colors[TP_index],
-#         color=colors[TP_index],
-#         label=str(TP_index + 1),
-#         linestyle="-" if TP_index < len(markers) / 2 else "--",
-#     )
+    Volt_values_TP_30C[TP_index] = Volt
+    TP_index = TP_index + 1
 
-#     TP_index = TP_index + 1
+print(Volt_values_TP_30C)
 
-# plt.xlabel(r"Temperature [$^{\circ}$C]")
-# plt.ylabel(r"$V_{OUT}$ [V]")
-# plt.title(
-#     r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (optimal R0 and R2)}"
-# )
-# plt.xticks(temperatures_int)
-# plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
-# plt.grid()
+plt.clf()
+TP_index = 0
+for TP in TPs:
+    Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
+    temp_index = 0
+    for temp in temperatures_str:
+        data_plot6 = pd.read_csv(
+            os.path.join(
+                TP_temp_slope_mean_vout,
+                "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+            )
+        )
 
-# print_plot(
-#     output_folder_drive, output_folder_github, "plot_6_optimized_R0_R2_normalized.pdf"
-# )
+        data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+        data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+        data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
+            data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
+        ]
+        data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+            data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
+        ]
+        Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean() / Volt_values_TP_30C[TP_index]
+
+        Volt_values_TP[temp_index] = Volt
+        temp_index = temp_index + 1
+
+    plt.plot(
+        temperatures_int,
+        Volt_values_TP,
+        linewidth=1,
+        marker=markers[TP_index],
+        markerfacecolor=colors[TP_index],
+        color=colors[TP_index],
+        label=str(TP_index + 1),
+        linestyle="-" if TP_index < len(markers) / 2 else "--",
+    )
+
+    TP_index = TP_index + 1
+
+plt.xlabel(r"Temperature [$^{\circ}$C]")
+plt.ylabel(r"$V_{OUT}$ [V]")
+plt.title(
+    r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (optimal R2)}"
+)
+plt.xticks(temperatures_int)
+plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
+plt.grid()
+
+print_plot(
+    output_folder_drive, output_folder_github, "plot_6_optimized_R2_normalized.pdf"
+)
 
 
-# # Optimize R0 and select R2 where Vout is nearest to 600 mV
-# TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
-# data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
-# TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
+# Optimize R0 and R2
+TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
+data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
+TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
 
-# R2_values = range(0, 8)
-# R0_values = np.zeros(shape=(len(R2_values), len(TPs)))
-# TP_index = 0
-# TP_counter = 0
-# for TP in TPs:
-#     R2_index = 0
-#     for R2 in R2_values:
-#         all_R2 = data_TC_raw[TP_index + 2]
-#         TC_single_TP = data_TC_raw.iloc[all_R2.index[all_R2 == R2].to_list()][
-#             [TP_index, TP_index + 1, TP_index + 2]
-#         ]
+TP_index = 0
+for TP in TPs:
+    TC_single_TP = data_TC_raw[[TP_index, TP_index + 1, TP_index + 2]]
 
-#         min_index = TC_single_TP.index[
-#             TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
-#         ].to_list()[0]
-#         min_mean = TC_single_TP.loc[min_index][TP_index + 1]
-#         min_slope = TC_single_TP.loc[min_index][TP_index + 2]
-#         TC_TP_mean_slope[TP - 1][0] = min_mean
-#         TC_TP_mean_slope[TP - 1][1] = min_slope
+    min_index = TC_single_TP.index[
+        TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
+    ].to_list()[0]
+    min_mean = TC_single_TP.loc[min_index][TP_index + 1]
+    min_slope = TC_single_TP.loc[min_index][TP_index + 2]
+    TC_TP_mean_slope[TP - 1][0] = min_mean
+    TC_TP_mean_slope[TP - 1][1] = min_slope
 
-#         R0_values[R2_index][TP_counter] = min_mean
+    TP_index = TP_index + 3
 
-#         R2_index = R2_index + 1
+print(TC_TP_mean_slope)
 
-#         print(str(min_mean) + "\t" + str(min_slope))
+# Select Vout for each TP at 30 °C
+Volt_values_TP_30C = np.zeros(shape=(len(TPs), 1))
+temp = "30"
+TP_index = 0
+for TP in TPs:
+    data_plot6 = pd.read_csv(
+        os.path.join(
+            TP_temp_slope_mean_vout,
+            "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+        )
+    )
 
-#     print("")
-#     TP_index = TP_index + 3
-#     TP_counter = TP_counter + 1
+    data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+    data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+    data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
+        data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
+    ]
+    data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+        data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
+    ]
+    Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
 
-# print(R0_values)
+    Volt_values_TP_30C[TP_index] = Volt
+    TP_index = TP_index + 1
 
-# plt.clf()
-# TP_index = 0
-# for TP in TPs:
-#     Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
-#     temp_index = 0
-#     for temp in temperatures_str:
-#         R2 = 0
-#         min_Volt_delta = 10 ** 5
-#         best_Volt = 0
-#         best_R2 = 0
-#         R0_column = column(R0_values, TP_index)
-#         print(R0_column)
-#         for R0 in R0_column:
-#             data_plot6 = pd.read_csv(
-#                 os.path.join(
-#                     TP_temp_slope_mean_vout,
-#                     "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
-#                 )
-#             )
+print(Volt_values_TP_30C)
 
-#             data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
-#             data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
-#             data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[data_plot6_Vin_TP["SLOPE"] == R2]
-#             data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
-#                 data_plot6_Vin_TP_R0["MEAN"] == R0
-#             ]
-#             Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
+plt.clf()
+TP_index = 0
+for TP in TPs:
+    Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
+    temp_index = 0
+    for temp in temperatures_str:
+        data_plot6 = pd.read_csv(
+            os.path.join(
+                TP_temp_slope_mean_vout,
+                "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+            )
+        )
 
-#             Volt_delta = abs(Volt_ref - Volt)
-#             if Volt_delta < min_Volt_delta:
-#                 min_Volt_delta = Volt_delta
-#                 best_Volt = Volt
-#                 best_R2 = R2
+        data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+        data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+        data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
+            data_plot6_Vin_TP["SLOPE"] == TC_TP_mean_slope[TP_index][0]
+        ]
+        data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+            data_plot6_Vin_TP_R0["MEAN"] == TC_TP_mean_slope[TP_index][1]
+        ]
+        Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean() / Volt_values_TP_30C[TP_index]
 
-#             R2 = R2 + 1
+        Volt_values_TP[temp_index] = Volt
+        temp_index = temp_index + 1
 
-#         TC_TP_mean_slope[TP - 1][1] = best_R2
-#         Volt_values_TP[temp_index] = best_Volt
-#         temp_index = temp_index + 1
+    plt.plot(
+        temperatures_int,
+        Volt_values_TP,
+        linewidth=1,
+        marker=markers[TP_index],
+        markerfacecolor=colors[TP_index],
+        color=colors[TP_index],
+        label=str(TP_index + 1),
+        linestyle="-" if TP_index < len(markers) / 2 else "--",
+    )
 
-#     print(Volt_values_TP)
+    TP_index = TP_index + 1
 
-#     plt.plot(
-#         temperatures_int,
-#         Volt_values_TP,
-#         linewidth=1,
-#         marker=markers[TP_index],
-#         markerfacecolor=colors[TP_index],
-#         color=colors[TP_index],
-#         label=str(TP_index + 1),
-#         linestyle="-" if TP_index < len(markers) / 2 else "--",
-#     )
+plt.xlabel(r"Temperature [$^{\circ}$C]")
+plt.ylabel(r"$V_{OUT}$ [V]")
+plt.title(
+    r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (optimal R0 and R2)}"
+)
+plt.xticks(temperatures_int)
+plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
+plt.grid()
 
-#     TP_index = TP_index + 1
+print_plot(
+    output_folder_drive, output_folder_github, "plot_6_optimized_R0_R2_normalized.pdf"
+)
 
-# plt.xlabel(r"Temperature [$^{\circ}$C]")
-# plt.ylabel(r"$V_{OUT}$ [V]")
-# plt.title(
-#     r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (R2 nearest to 600 mV)}"
-# )
-# plt.xticks(temperatures_int)
-# plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
-# plt.grid()
 
-# print_plot(
-#     output_folder_drive, output_folder_github, "plot_6_optimized_R0_nearest_R2.pdf"
-# )
+# Optimize R0 and select R2 where Vout is nearest to 600 mV
+TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
+data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
+TC_TP_mean_slope = np.zeros(shape=(len(TPs), 2))
+
+R2_values = range(0, 8)
+R0_values = np.zeros(shape=(len(R2_values), len(TPs)))
+TP_index = 0
+TP_counter = 0
+for TP in TPs:
+    R2_index = 0
+    for R2 in R2_values:
+        all_R2 = data_TC_raw[TP_index + 2]
+        TC_single_TP = data_TC_raw.iloc[all_R2.index[all_R2 == R2].to_list()][
+            [TP_index, TP_index + 1, TP_index + 2]
+        ]
+
+        min_index = TC_single_TP.index[
+            TC_single_TP[TP_index] == min(TC_single_TP[TP_index])
+        ].to_list()[0]
+        min_mean = TC_single_TP.loc[min_index][TP_index + 1]
+        min_slope = TC_single_TP.loc[min_index][TP_index + 2]
+        TC_TP_mean_slope[TP - 1][0] = min_mean
+        TC_TP_mean_slope[TP - 1][1] = min_slope
+
+        R0_values[R2_index][TP_counter] = min_mean
+
+        R2_index = R2_index + 1
+
+        print(str(min_mean) + "\t" + str(min_slope))
+
+    print("")
+    TP_index = TP_index + 3
+    TP_counter = TP_counter + 1
+
+print(R0_values)
+
+# Select Vout for each TP at 30 °C
+RO_R2_nearest_values = pd.read_csv(
+    "output\plot_6\mean_slope_optimized_R0_nearest_R2.dat", sep="\t"
+)
+
+print(RO_R2_nearest_values)
+
+Volt_values_TP_30C = np.zeros(shape=(len(TPs), 1))
+temp = "30"
+TP_index = 0
+for TP in TPs:
+    R0_column = column(R0_values, TP_index)
+    R0 = R0_column[7]  # Select R0 at 30 °C
+    data_plot6 = pd.read_csv(
+        os.path.join(
+            TP_temp_slope_mean_vout,
+            "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+        )
+    )
+
+    data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+    data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+    data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[
+        data_plot6_Vin_TP["SLOPE"] == RO_R2_nearest_values.iloc[TP_index]["R2"]
+    ]
+    data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+        data_plot6_Vin_TP_R0["MEAN"] == RO_R2_nearest_values.iloc[TP_index]["R0"]
+    ]
+    Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
+
+    Volt_values_TP_30C[TP_index] = Volt
+    TP_index = TP_index + 1
+
+print(Volt_values_TP_30C)
+
+
+plt.clf()
+TP_index = 0
+for TP in TPs:
+    Volt_values_TP = np.zeros(shape=(len(temperatures_str), 1))
+    temp_index = 0
+    for temp in temperatures_str:
+        R2 = 0
+        min_Volt_delta = 10 ** 5
+        best_Volt = 0
+        best_R2 = 0
+        R0_column = column(R0_values, TP_index)
+        print(R0_column)
+        for R0 in R0_column:
+            data_plot6 = pd.read_csv(
+                os.path.join(
+                    TP_temp_slope_mean_vout,
+                    "Results_TP" + str(TP) + "_REG_" + str(temp) + ".csv",
+                )
+            )
+
+            data_plot6_Vin = data_plot6[data_plot6["Vin"] == Vin]
+            data_plot6_Vin_TP = data_plot6_Vin[data_plot6_Vin["TP"] == TP]
+            data_plot6_Vin_TP_R0 = data_plot6_Vin_TP[data_plot6_Vin_TP["SLOPE"] == R2]
+            data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
+                data_plot6_Vin_TP_R0["MEAN"] == R0
+            ]
+            Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean() / Volt_values_TP_30C[TP_index]
+
+            Volt_delta = abs(Volt_ref - Volt)
+            if Volt_delta < min_Volt_delta:
+                min_Volt_delta = Volt_delta
+                best_Volt = Volt
+                best_R2 = R2
+
+            R2 = R2 + 1
+
+        TC_TP_mean_slope[TP - 1][1] = best_R2
+        Volt_values_TP[temp_index] = best_Volt
+        temp_index = temp_index + 1
+
+    print(Volt_values_TP)
+
+    plt.plot(
+        temperatures_int,
+        Volt_values_TP,
+        linewidth=1,
+        marker=markers[TP_index],
+        markerfacecolor=colors[TP_index],
+        color=colors[TP_index],
+        label=str(TP_index + 1),
+        linestyle="-" if TP_index < len(markers) / 2 else "--",
+    )
+
+    TP_index = TP_index + 1
+
+plt.xlabel(r"Temperature [$^{\circ}$C]")
+plt.ylabel(r"$V_{OUT}$ [V]")
+plt.title(
+    r"\boldmath$V_{OUT}$ \textbf{vs} \textbf{Temperature for every bandgap (R2 nearest to 600 mV)}"
+)
+plt.xticks(temperatures_int)
+plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5))
+plt.grid()
+
+print_plot(
+    output_folder_drive, output_folder_github, "plot_6_optimized_R0_nearest_R2.pdf"
+)
