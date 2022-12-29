@@ -510,9 +510,6 @@ for TP in TPs:
     Volt_values_TP_30C[TP_index] = Volt
     TP_index = TP_index + 1
 
-print(Volt_values_TP_30C)
-
-
 plt.clf()
 TP_index = 0
 for TP in TPs:
@@ -523,8 +520,13 @@ for TP in TPs:
         min_Volt_delta = 10 ** 5
         best_Volt = 0
         best_R2 = 0
+        best_Volt_norm = 0
         R0_column = column(R0_values, TP_index)
-        print(R0_column)
+
+        if TP == 1:
+            print("R0_column for TP1")
+            print(R0_column)
+
         for R0 in R0_column:
             data_plot6 = pd.read_csv(
                 os.path.join(
@@ -539,21 +541,25 @@ for TP in TPs:
             data_plot6_Vin_TP_R0_R2 = data_plot6_Vin_TP_R0[
                 data_plot6_Vin_TP_R0["MEAN"] == R0
             ]
-            Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean() / Volt_values_TP_30C[TP_index]
 
+            Volt = data_plot6_Vin_TP_R0_R2["Volt"].mean()
             Volt_delta = abs(Volt_ref - Volt)
+
             if Volt_delta < min_Volt_delta:
                 min_Volt_delta = Volt_delta
                 best_Volt = Volt
                 best_R2 = R2
+                best_Volt_norm = Volt
 
             R2 = R2 + 1
 
-        TC_TP_mean_slope[TP - 1][1] = best_R2
-        Volt_values_TP[temp_index] = best_Volt
-        temp_index = temp_index + 1
+        TC_TP_mean_slope[TP_index][1] = best_R2
 
-    print(Volt_values_TP)
+        if TP == 1:
+            Volt_values_TP_30C[TP_index] = 0.5965503
+
+        Volt_values_TP[temp_index] = best_Volt_norm / Volt_values_TP_30C[TP_index]
+        temp_index = temp_index + 1
 
     plt.plot(
         temperatures_int,
@@ -578,5 +584,7 @@ plt.legend(title=r"\textbf{Bandgap}", loc="center left", bbox_to_anchor=(1, 0.5)
 plt.grid()
 
 print_plot(
-    output_folder_drive, output_folder_github, "plot_6_optimized_R0_nearest_R2.pdf"
+    output_folder_drive,
+    output_folder_github,
+    "plot_6_optimized_R0_nearest_R2_normalized.pdf",
 )
