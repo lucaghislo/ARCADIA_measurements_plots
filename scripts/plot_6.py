@@ -432,7 +432,6 @@ with open(
         counter = counter + 1
 
 
-# TODO
 # Optimize R0 and select R2 where Vout is nearest to 600 mV
 TC_mean_slope_filepath = os.path.join(main_input_path, "TC_all_TPs.csv")
 data_TC_raw = pd.read_csv(TC_mean_slope_filepath, header=None)
