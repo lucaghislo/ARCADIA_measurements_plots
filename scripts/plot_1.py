@@ -38,7 +38,7 @@ temperatures_int = [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70]
 TPs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 Vins = [1.08, 1.2, 1.32]
 R0 = 7
-R2 = 7
+R2 = 1
 
 markers = ["o", "s", "v"]
 
@@ -99,5 +99,5 @@ for TP in TPs:
     print_plot(
         output_folder_drive,
         output_folder_github,
-        "plot_1_TP" + str(TP) + ".pdf",
+        "plot_1_TP" + str(TP) + "_mean1_slope7.pdf",
     )
